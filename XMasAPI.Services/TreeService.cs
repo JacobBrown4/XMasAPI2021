@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XMasAPI.Data;
 using XMasAPI.Models;
+using XMasAPI.Models.Present;
 using XMasAPI.Models.Tree;
 
 namespace XMasAPI.Services
@@ -35,7 +36,7 @@ namespace XMasAPI.Services
 
         public IEnumerable<TreeListItem> GetTrees()
         {
-            using(var ctx = new ApplicationDbContext())
+            using (var ctx = new ApplicationDbContext())
             {
                 return ctx.Trees.Select(x => new TreeListItem
                 {
@@ -43,6 +44,29 @@ namespace XMasAPI.Services
                     Description = x.Description,
                     AmountOfPresents = x.Presents.Count()
                 }).ToArray();
+            }
+        }
+
+        public TreeDetail GetTreeById(int id)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var tree = ctx.Trees.Single(p => p.Id == id);
+                return new TreeDetail()
+                {
+                    Description = tree.Description,
+                    HasStar = tree.HasStar,
+                    PresentCount = tree.Presents.Count(),
+                    Presents = tree.Presents.Select(x => new PresentListItem
+                    {
+                        PresentId = x.Id,
+                        PresentType = ((PresentType)x.PresentType).ToString(),
+                        Wrapping = x.Wrapping,
+                        Contains = x.WhatsInside,
+                        TreeId = x.TreeId
+                    }).ToList()
+                };
+
             }
         }
     }
