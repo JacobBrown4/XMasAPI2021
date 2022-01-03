@@ -5,17 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XMasAPI.Data
+namespace XMasAPI.Models.Ornament
 {
-    public class Tree
+    public class OrnamentEdit
     {
         [Key]
-        public int Id { get; set; }
+        public int OrnamentId { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
-        public bool HasStar { get; set; }
-        public virtual List<Present> Presents { get; set; }
-        public virtual List<Ornament> Ornaments { get; set; }
+        public int TreeId { get; set; }
     }
 }

@@ -25,13 +25,15 @@ namespace XMasAPI.Services
             {
                 PresentType = (int)model.PresentType,
                 Wrapping = model.Wrapping,
-                WhatsInside = model.Contains,
                 Hint1 = model.Hint1,
                 Hint2 = model.Hint2,
                 Hint3 = model.Hint3,
-                TreeId = model.TreeId
-
+                TreeId = model.TreeId,
+                TimesShaken = 0,
+                IsWrapped = true
             };
+
+            present.Contains = model.Contains;
 
             using (var ctx = new ApplicationDbContext())
             {
@@ -49,7 +51,7 @@ namespace XMasAPI.Services
                     PresentId = x.Id,
                     PresentType = ((PresentType)x.PresentType).ToString(),
                     Wrapping = x.Wrapping,
-                    Contains = x.WhatsInside,
+                    Contains = x.Contains,
                     TreeId = x.TreeId
                 }).ToArray();
             }
@@ -60,7 +62,7 @@ namespace XMasAPI.Services
             using (var ctx = new ApplicationDbContext())
             {
                 var present = ctx.Presents.SingleOrDefault(p => p.Id == id);
-                if(present == default)
+                if (present == default)
                 {
                     return null;
                 }
@@ -70,14 +72,15 @@ namespace XMasAPI.Services
                         PresentId = present.Id,
                         PresentType = ((PresentType)present.PresentType).ToString(),
                         Wrapping = present.Wrapping,
-                        Contains = present.WhatsInside,
+                        Contains = present.Contains,
                         TimesShaken = present.TimesShaken,
                         IsWrapped = present.IsWrapped,
                         Tree = new Models.Tree.TreeListItem
                         {
                             TreeId = present.Tree.Id,
                             Description = present.Tree.Description,
-                            AmountOfPresents = present.Tree.Presents.Count()
+                            AmountOfPresents = present.Tree.Presents.Count(),
+                            AmountOfOrnaments = present.Tree.Presents.Count()
                         }
                     };
             }
@@ -98,22 +101,21 @@ namespace XMasAPI.Services
             using (var ctx = new ApplicationDbContext())
             {
                 var present = ctx.Presents.SingleOrDefault(p => p.Id == id);
-                var shake = present.Unwrap();
+                var unwrapped = present.Unwrap();
                 ctx.SaveChanges(); //That way we save the unwrap status
-                return shake;
+                return unwrapped;
             }
         }
 
         public PresentDetail UpdatePresent(PresentEdit edited)
         {
-            using(var ctx = new ApplicationDbContext())
+            using (var ctx = new ApplicationDbContext())
             {
                 var present = ctx.Presents.SingleOrDefault(p => p.Id == edited.PresentId);
-                if(present != default)
+                if (present != default)
                 {
                     present.PresentType = (int)edited.PresentType;
                     present.Wrapping = edited.Wrapping;
-                    present.WhatsInside = edited.Contains;
                     present.Hint1 = edited.Hint1;
                     present.Hint2 = edited.Hint2;
                     present.Hint3 = edited.Hint3;

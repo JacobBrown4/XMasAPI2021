@@ -11,5 +11,6 @@ namespace XMasAPI.Models.Tree
         public int TreeId { get; set; }
         public string Description { get; set; }
         public int AmountOfPresents { get; set; }
+        public int AmountOfOrnaments { get; set; }
     }
 }

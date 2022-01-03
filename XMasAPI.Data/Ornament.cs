@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 
 namespace XMasAPI.Data
 {
-    public class Tree
+    public class Ornament
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
-        public bool HasStar { get; set; }
-        public virtual List<Present> Presents { get; set; }
-        public virtual List<Ornament> Ornaments { get; set; }
+        public int TreeId { get; set; }
+        public virtual Tree Tree { get; set; }
     }
 }

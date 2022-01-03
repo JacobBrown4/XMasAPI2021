@@ -34,6 +34,7 @@ namespace XMasAPI.Data
         }
 
         public DbSet<Tree> Trees { get; set; }
+        public DbSet<Ornament> Ornaments { get; set; }
         public DbSet<Present> Presents { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

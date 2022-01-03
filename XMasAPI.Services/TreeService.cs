@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XMasAPI.Data;
 using XMasAPI.Models;
+using XMasAPI.Models.Ornament;
 using XMasAPI.Models.Present;
 using XMasAPI.Models.Tree;
 
@@ -42,7 +43,8 @@ namespace XMasAPI.Services
                 {
                     TreeId = x.Id,
                     Description = x.Description,
-                    AmountOfPresents = x.Presents.Count()
+                    AmountOfPresents = x.Presents.Count(),
+                    AmountOfOrnaments = x.Ornaments.Count()
                 }).ToArray();
             }
         }
@@ -62,11 +64,52 @@ namespace XMasAPI.Services
                         PresentId = x.Id,
                         PresentType = ((PresentType)x.PresentType).ToString(),
                         Wrapping = x.Wrapping,
-                        Contains = x.WhatsInside,
+                        Contains = x.Contains,
                         TreeId = x.TreeId
-                    }).ToList()
+                    }).ToList(),
+                    OrnamentCount = tree.Ornaments.Count(),
+                    Ornaments = tree.Ornaments.Select(o => new OrnamentListItem
+                    {
+                        OrnamentId = o.Id,
+                        Description = o.Description,
+                        TreeId = o.TreeId
+                    }).ToList(),
+                    Gifts = tree.Presents.Where(p => p.IsWrapped == false).Select(x => x.Contains).ToList()
                 };
 
+            }
+        }
+        public bool UpdateTree(TreeEdit edited)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var tree = ctx.Trees.SingleOrDefault(p => p.Id == edited.TreeId);
+                if (tree != default)
+                {
+                    tree.Description = edited.Description;
+                    tree.HasStar = edited.HasStar;
+
+                    return ctx.SaveChanges() == 1;
+
+
+                }
+                return false;
+            }
+        }
+        public List<string> UnwrapAll(int id)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var tree = ctx.Trees.Single(t => t.Id == id);
+                var presents = tree.Presents.Where(p => p.IsWrapped == true);
+                List<string> gifts = new List<string>();
+                foreach (var present in presents)
+                {
+                    present.Unwrap();
+                    gifts.Add(present.Contains);
+                }
+                ctx.SaveChanges();
+                return gifts;
             }
         }
     }

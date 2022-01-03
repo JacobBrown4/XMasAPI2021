@@ -10,12 +10,8 @@ namespace XMasAPI.Data
 {
     public class Present
     {
+        private string _contains;
 
-        public Present()
-        {
-            TimesShaken = 0;
-            IsWrapped = true;
-        }
         [Key]
         public int Id { get; set; }
         [Required]
@@ -23,17 +19,19 @@ namespace XMasAPI.Data
         [Required]
         public string Wrapping { get; set; }
         [Required]
-        private string Contains { get; set; }
-        public virtual string WhatsInside
+        public string Contains
         {
             get
             {
                 if (IsWrapped)
-                    return "Who knows what's inside?";
+                    return "Who knows?";
                 else
-                    return Contains;
+                    return _contains;
             }
-            set { Contains = value; }
+            set
+            {
+                _contains = value;
+            }
         }
         [Required]
         public string Hint1 { get; set; }
@@ -41,14 +39,14 @@ namespace XMasAPI.Data
         public string Hint2 { get; set; }
         [Required]
         public string Hint3 { get; set; }
-        public int TimesShaken { get; private set; }
-        public bool IsWrapped { get; private set; }
+        public int TimesShaken { get; set; }
+        public bool IsWrapped { get; set; }
         public string Unwrap()
         {
             if (IsWrapped)
             {
                 IsWrapped = false;
-                PresentType = 2;
+                PresentType = 1;
                 return Contains;
             }
             else

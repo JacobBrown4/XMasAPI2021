@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrnamentService.cs" />
     <Compile Include="PresentService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TreeService.cs" />

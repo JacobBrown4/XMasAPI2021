@@ -55,6 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
+    <Compile Include="Ornament\OrnamentCreate.cs" />
+    <Compile Include="Ornament\OrnamentDetail.cs" />
+    <Compile Include="Ornament\OrnamentEdit.cs" />
+    <Compile Include="Ornament\OrnamentListItem.cs" />
     <Compile Include="Present\PresentCreate.cs" />
     <Compile Include="Present\PresentDetail.cs" />
     <Compile Include="Present\PresentEdit.cs" />
