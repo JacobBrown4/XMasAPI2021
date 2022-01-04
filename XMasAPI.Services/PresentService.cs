@@ -29,11 +29,11 @@ namespace XMasAPI.Services
                 Hint2 = model.Hint2,
                 Hint3 = model.Hint3,
                 TreeId = model.TreeId,
+                Contains = model.Contains,
                 TimesShaken = 0,
                 IsWrapped = true
             };
 
-            present.Contains = model.Contains;
 
             using (var ctx = new ApplicationDbContext())
             {
@@ -51,7 +51,7 @@ namespace XMasAPI.Services
                     PresentId = x.Id,
                     PresentType = ((PresentType)x.PresentType).ToString(),
                     Wrapping = x.Wrapping,
-                    Contains = x.Contains,
+                    Contains = x.IsWrapped ? "Who knows?" : x.Contains,
                     TreeId = x.TreeId
                 }).ToArray();
             }
@@ -72,7 +72,7 @@ namespace XMasAPI.Services
                         PresentId = present.Id,
                         PresentType = ((PresentType)present.PresentType).ToString(),
                         Wrapping = present.Wrapping,
-                        Contains = present.Contains,
+                        Contains = present.IsWrapped ? "Who knows?" : present.Contains,
                         TimesShaken = present.TimesShaken,
                         IsWrapped = present.IsWrapped,
                         Tree = new Models.Tree.TreeListItem
@@ -80,7 +80,7 @@ namespace XMasAPI.Services
                             TreeId = present.Tree.Id,
                             Description = present.Tree.Description,
                             AmountOfPresents = present.Tree.Presents.Count(),
-                            AmountOfOrnaments = present.Tree.Presents.Count()
+                            AmountOfOrnaments = present.Tree.Ornaments.Count()
                         }
                     };
             }
@@ -103,7 +103,8 @@ namespace XMasAPI.Services
                 var present = ctx.Presents.SingleOrDefault(p => p.Id == id);
                 var unwrapped = present.Unwrap();
                 ctx.SaveChanges(); //That way we save the unwrap status
-                return unwrapped;
+                var aAn = "aeiouAEIOU".IndexOf(unwrapped.First()) >= 0 ? "an" : "a";
+                return $"Oh my god it's {aAn} {unwrapped}!";
             }
         }
 

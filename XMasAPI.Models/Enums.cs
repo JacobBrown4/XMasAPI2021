@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace XMasAPI.Models
 {
-   public enum PresentType { Unwrapped =1, BigBox, SmallBox, BigBag, SmallBag, Stocking}
+   public enum PresentType { BigBox, SmallBox, BigBag, SmallBag, Stocking, Unwrapped = 20}
 }

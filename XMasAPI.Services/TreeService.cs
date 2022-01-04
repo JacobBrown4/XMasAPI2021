@@ -25,7 +25,8 @@ namespace XMasAPI.Services
         {
             var tree = new Tree()
             {
-                Description = model.Description
+                Description = model.Description,
+                HasStar = model.HasStar,
             };
 
             using (var ctx = new ApplicationDbContext())
@@ -64,7 +65,7 @@ namespace XMasAPI.Services
                         PresentId = x.Id,
                         PresentType = ((PresentType)x.PresentType).ToString(),
                         Wrapping = x.Wrapping,
-                        Contains = x.Contains,
+                        Contains = x.IsWrapped ? "Who knows?" : x.Contains,
                         TreeId = x.TreeId
                     }).ToList(),
                     OrnamentCount = tree.Ornaments.Count(),

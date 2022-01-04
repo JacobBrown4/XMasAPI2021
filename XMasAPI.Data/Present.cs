@@ -10,7 +10,6 @@ namespace XMasAPI.Data
 {
     public class Present
     {
-        private string _contains;
 
         [Key]
         public int Id { get; set; }
@@ -19,20 +18,7 @@ namespace XMasAPI.Data
         [Required]
         public string Wrapping { get; set; }
         [Required]
-        public string Contains
-        {
-            get
-            {
-                if (IsWrapped)
-                    return "Who knows?";
-                else
-                    return _contains;
-            }
-            set
-            {
-                _contains = value;
-            }
-        }
+        public string Contains { get; set; }
         [Required]
         public string Hint1 { get; set; }
         [Required]
@@ -46,7 +32,7 @@ namespace XMasAPI.Data
             if (IsWrapped)
             {
                 IsWrapped = false;
-                PresentType = 1;
+                PresentType = 20;
                 return Contains;
             }
             else
@@ -55,19 +41,24 @@ namespace XMasAPI.Data
 
         public string Shake()
         {
-
-            switch (TimesShaken++)
+            if (IsWrapped)
             {
-                case 0:
-                    return Hint1;
-                case 1:
-                    return Hint2;
-                case 2:
-                    return Hint3;
-                default:
-                    return "No more hints left";
 
+                switch (TimesShaken++)
+                {
+                    case 0:
+                        return Hint1;
+                    case 1:
+                        return Hint2;
+                    case 2:
+                        return Hint3;
+                    default:
+                        return "No more hints left";
+
+                }
             }
+            else
+                return "It's already unwrapped dum dum!";
         }
         [Required]
         public int TreeId { get; set; }
